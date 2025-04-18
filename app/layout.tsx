@@ -5,6 +5,7 @@ import "./globals.css"
 import Navbar from "./navigation/Navbar";
 import { Toaster } from "@/components/ui/toaster"
 import Footer from "./footer/page";
+import { UserProvider } from "./context/UserContext";
 
 
 const inter = Inter({ subsets: ["latin"] })
@@ -12,7 +13,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "دار تسنيم",
   description: "Tableau de bord d'administration pour restaurant marocain"
-    
+
 }
 
 export default function RootLayout({
@@ -23,10 +24,12 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={inter.className}>
-      <Navbar/>
-        {children}
-        <Toaster />
-        <Footer/>
+        <UserProvider>
+          <Navbar />
+          {children}
+          <Toaster />
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   )

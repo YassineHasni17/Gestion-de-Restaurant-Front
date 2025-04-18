@@ -10,7 +10,14 @@ const API_URL = '/menus';
 
 export const MenusService = {
     async getAllMenus() {
-        return await fetchApi<Menu[]>(API_URL);
+        const accessToken = localStorage.getItem("accessToken");
+        console.log("😂😂😂 Token JWT:", accessToken);
+        return await fetchApi<Menu[]>(API_URL,{
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
     },
 
     async getMenuById(id: number) {
@@ -18,10 +25,13 @@ export const MenusService = {
     },
 
     async createMenu(menuData: { name: string; description?: string; price: number }) {
+        const accessToken = localStorage.getItem("accessToken"); 
+        console.log("😂😂😂 Token JWT:", accessToken); // Debugging line
         return await fetchApi<Menu>(API_URL, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
             },
             body: JSON.stringify(menuData),
         });

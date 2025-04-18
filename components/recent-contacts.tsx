@@ -14,20 +14,51 @@ export function ContactsList() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/contact")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data); 
+    const fetchContacts = async () => {
+      try {
+        // Récupérer le accessToken depuis localStorage
+        const accessToken = localStorage.getItem("accessToken");
+        console.log("Token utilisé :", accessToken);
+
+        if (!accessToken) {
+          setError("Vous devez être connecté pour accéder aux contacts.");
+          return;
+        }
+
+        // Effectuer la requête avec le accessToken dans les en-têtes
+        const response = await fetch("http://localhost:8000/contact", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log("Réponse de l'API :", response);
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            setError("Accès non autorisé. Veuillez vérifier vos informations d'identification.");
+          } else {
+            setError("Erreur lors de la récupération des contacts.");
+          }
+          throw new Error(`Erreur HTTP : ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Données reçues :", data);
+
         if (Array.isArray(data)) {
           setContacts(data);
         } else {
           setError("Les données reçues ne sont pas un tableau.");
         }
-      })
-      .catch((error) => {
-        console.error("Erreur lors de la récupération des contacts:", error);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des contacts :", error);
         setError("Erreur de connexion à l'API.");
-      });
+      }
+    };
+
+    fetchContacts();
   }, []);
 
   if (error) {

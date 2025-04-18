@@ -190,47 +190,8 @@ export async function ajouterStock(stock: Stock): Promise<Stock | null> {
     return null
   }
 }
-// Fonctions CRUD pour les ingrédients
-// Note: Ces fonctions utilisent toujours localStorage car nous supposons que l'API pour les ingrédients
-// n'est pas encore implémentée. Vous pourrez les adapter plus tard.
-
-export function getIngredients(): Ingredient[] {
-  if (typeof window === "undefined") return []
-  const ingredients = localStorage.getItem("ingredients")
-  return ingredients ? JSON.parse(ingredients) : []
-}
-
-export function getIngredient(id: number): Ingredient | undefined {
-  const ingredients = getIngredients()
-  return ingredients.find((ingredient: Ingredient) => ingredient.id === id)
-}
-
-export function ajouterIngredient(ingredient: Ingredient): Ingredient {
-  const ingredients = getIngredients()
-  const newId = ingredients.length > 0 ? Math.max(...ingredients.map((i: Ingredient) => i.id || 0)) + 1 : 1
-  const newIngredient = { ...ingredient, id: newId }
-  localStorage.setItem("ingredients", JSON.stringify([...ingredients, newIngredient]))
-  return newIngredient
-}
 
 
-export function modifierIngredient(id: number, ingredient: Partial<Ingredient>): Ingredient | null {
-  const ingredients = getIngredients()
-  const index = ingredients.findIndex((i: Ingredient) => i.id === id)
-  if (index !== -1) {
-    ingredients[index] = { ...ingredients[index], ...ingredient }
-    localStorage.setItem("ingredients", JSON.stringify(ingredients))
-    return ingredients[index]
-  }
-  return null
-}
-
-export function supprimerIngredient(id: number): boolean {
-  const ingredients = getIngredients()
-  const newIngredients = ingredients.filter((ingredient: Ingredient) => ingredient.id !== id)
-  localStorage.setItem("ingredients", JSON.stringify(newIngredients))
-  return true
-}
 export function getReservations(): Reservation[] {
   if (typeof window === "undefined") return []
   const reservations = localStorage.getItem("reservations")

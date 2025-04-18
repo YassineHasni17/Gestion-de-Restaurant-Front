@@ -7,14 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Plus, MoreHorizontal } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Plus } from "lucide-react";
 
 interface Stock {
   id: string;
@@ -23,7 +16,7 @@ interface Stock {
   unite: string;
   categorie: string;
   niveau: string;
-  disponibilite: string; 
+  disponibilite: string;
   action: string;
 }
 
@@ -33,10 +26,20 @@ export default function StockListPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    StockService.getAll()
-      .then((data) => setStocks(data))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    const fetchStocks = async () => {
+      try {
+        const data = await StockService.getAll();
+        setStocks(data);
+        setError(null);
+      } catch (err: any) {
+        console.error("Erreur lors de la récupération des stocks :", err);
+        setError(err.message || "Une erreur est survenue lors de la récupération des stocks.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStocks();
   }, []);
 
   if (loading) return <div className="text-center p-4">Chargement...</div>;
@@ -69,27 +72,29 @@ export default function StockListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-  {stocks.map((stock, index) => (
-    <TableRow key={`${stock.id ?? index}-${stock.nomS}-${stock.categorie}`}>
-      <TableCell className="font-medium">{stock.nomS}</TableCell>
-      <TableCell>{stock.categorie}</TableCell>
-      <TableCell>{stock.quantite} {stock.unite}</TableCell>
-      <TableCell>
-        <div className="flex items-center gap-2">
-          <Progress value={parseInt(stock.niveau)} className="h-2 w-[100px]" />
-          <span className="text-xs text-muted-foreground">{stock.niveau}%</span>
-        </div>
-      </TableCell>
-      <TableCell>
-        {stock.action === "Disponible" ? (
-          <Badge className="bg-green-50 text-green-700">Disponible</Badge>
-        ) : (
-          <Badge className="bg-red-50 text-red-700">Indisponible</Badge>
-        )}
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody>
+              {stocks.map((stock, index) => (
+                <TableRow key={`${stock.id ?? index}-${stock.nomS}-${stock.categorie}`}>
+                  <TableCell className="font-medium">{stock.nomS}</TableCell>
+                  <TableCell>{stock.categorie}</TableCell>
+                  <TableCell>
+                    {stock.quantite} {stock.unite}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Progress value={parseInt(stock.niveau)} className="h-2 w-[100px]" />
+                      <span className="text-xs text-muted-foreground">{stock.niveau}%</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {stock.action === "Disponible" ? (
+                      <Badge className="bg-green-50 text-green-700">Disponible</Badge>
+                    ) : (
+                      <Badge className="bg-red-50 text-red-700">Indisponible</Badge>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
           </Table>
         </CardContent>
       </Card>

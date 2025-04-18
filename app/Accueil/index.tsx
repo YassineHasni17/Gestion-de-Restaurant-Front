@@ -68,7 +68,7 @@ const Accueil: React.FC = () => {
                     <p className="text-xl text-gray-700 leading-relaxed mb-8 font-light text-center">
                         Le restaurant دار تسنيم, situé à Rabat, doit sa magie à Yassine HASNI. Niché dans un cadre enchanteur, il propose une expérience culinaire authentique où tradition et raffinement se rencontrent. On y déguste des plats savoureux préparés avec des produits du terroir, dans une ambiance chaleureuse et conviviale.
                     </p>
-                    <Link href="/menu#apropos">
+                    <Link href="/restaurant">
                         <button className="mt-4 px-8 py-4 rounded-lg shadow-lg text-white text-xl font-semibold transition-transform transform hover:scale-110 bg-gradient-to-r from-[#7C4B3C] to-[#e1e14d] hover:brightness-110">
                             Lire Plus
                         </button>
@@ -87,7 +87,7 @@ const Accueil: React.FC = () => {
                     <p className="text-xl text-gray-700 leading-relaxed mb-8 font-light text-center">
                         Visiter دار تسنيم, c'est vivre une expérience immersive alliant raffinement et tradition. Yassine HASNI, maître des lieux, accueille chaleureusement ses invités pour un moment d’évasion culinaire unique. Dans une ambiance authentique, chaque visite devient un voyage sensoriel où saveurs et hospitalité se rencontrent.
                     </p>
-                    <Link href="/menu#rituel">
+                    <Link href="/restaurant">
                         <button className="mt-4 px-8 py-4 rounded-lg shadow-lg text-white text-xl font-semibold transition-transform transform hover:scale-110 bg-gradient-to-r from-[#7C4B3C] to-[#e1e14d] hover:brightness-110">
                             Lire Plus
                         </button>
@@ -162,3 +162,5 @@ const Accueil: React.FC = () => {
 };
 
 export default Accueil;
+
+
